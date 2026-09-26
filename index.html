@@ -3,130 +3,464 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Can You Spare $1?</title>
 
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
       min-height: 100vh;
-      padding: 20px;
+      color: white;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(80,120,255,.25), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(160,70,255,.2), transparent 30%),
+        #070914;
+      overflow-x: hidden;
     }
 
-    .card {
-      background: white;
-      max-width: 520px;
-      width: 100%;
-      padding: 40px 30px;
-      border-radius: 20px;
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: .25;
+      z-index: -1;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      background: #4169ff;
+      top: -150px;
+      left: -150px;
+    }
+
+    body::after {
+      background: #a855f7;
+      right: -150px;
+      bottom: -150px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      from { transform: translate(0, 0); }
+      to { transform: translate(60px, -40px); }
+    }
+
+    .container {
+      width: min(900px, 92%);
+      margin: auto;
+      padding: 70px 0;
+    }
+
+    .hero {
       text-align: center;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+      margin-bottom: 45px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      color: #b9c7ff;
+      font-size: 14px;
+      margin-bottom: 22px;
     }
 
     h1 {
-      font-size: 42px;
-      margin: 0 0 15px;
+      font-size: clamp(45px, 9vw, 85px);
+      line-height: .95;
+      letter-spacing: -4px;
+      margin-bottom: 25px;
     }
 
-    p {
-      font-size: 18px;
-      line-height: 1.6;
-      color: #555;
+    .gradient {
+      background: linear-gradient(90deg, #8ea7ff, #c58cff, #8ea7ff);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: gradient 5s linear infinite;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      color: #aeb4c8;
+      font-size: 19px;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 28px;
+      padding: 35px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    }
+
+    .goal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+
+    .raised {
+      font-size: 38px;
+      font-weight: 800;
     }
 
     .goal {
-      margin: 30px 0;
+      color: #9299ad;
+      font-size: 15px;
     }
 
-    .amount {
-      font-size: 34px;
-      font-weight: bold;
-    }
-
-    .bar {
-      width: 100%;
+    .progress-track {
       height: 18px;
-      background: #e5e7eb;
-      border-radius: 20px;
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
       overflow: hidden;
-      margin-top: 12px;
+      margin-bottom: 12px;
     }
 
     .progress {
       width: 0%;
       height: 100%;
-      background: #3d95ce;
-      border-radius: 20px;
+      background: linear-gradient(90deg, #6f8cff, #b16cff);
+      border-radius: inherit;
+      box-shadow: 0 0 25px rgba(120,100,255,.6);
+    }
+
+    .percentage {
+      text-align: right;
+      color: #9da5bb;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .button {
+      flex: 1;
+      border: none;
+      border-radius: 15px;
+      padding: 17px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: transform .2s, box-shadow .2s;
     }
 
     .donate {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 16px 35px;
-      background: #3d95ce;
       color: white;
-      text-decoration: none;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 12px;
-      transition: 0.2s;
+      background: linear-gradient(135deg, #5575ff, #985cff);
+      box-shadow: 0 10px 30px rgba(105,85,255,.3);
+    }
+
+    .share {
+      color: white;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
     }
 
     .donate:hover {
-      transform: scale(1.04);
+      box-shadow: 0 15px 40px rgba(105,85,255,.5);
     }
 
-    .small {
-      font-size: 14px;
-      color: #888;
+    .celebrate {
+      width: 100%;
+      margin-top: 14px;
+      color: white;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
       margin-top: 25px;
+    }
+
+    .info-box {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.07);
+      text-align: center;
+    }
+
+    .info-box strong {
+      display: block;
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    .info-box span {
+      color: #9299ad;
+      font-size: 13px;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 35px;
+      color: #999fb2;
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      color: #656b7c;
+      font-size: 13px;
+      margin-top: 45px;
+    }
+
+    #confetti-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -30px;
+      width: 10px;
+      height: 16px;
+      animation: confettiFall linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .container {
+        padding: 40px 0;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .info {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
+  <main class="container">
 
-    <h1>Can You Spare $1?</h1>
+    <section class="hero">
 
-    <p>
-      I'm trying to raise some money and I'm asking people who are willing
-      to help for just $1.
-    </p>
+      <div class="badge">
+        ✨ One dollar can help
+      </div>
 
-    <div class="goal">
-      <div class="amount">$0 raised</div>
-      <p>Goal: $1,000,000</p>
+      <h1>
+        Can You Spare<br>
+        <span class="gradient">$1?</span>
+      </h1>
 
-      <div class="bar">
+      <p>
+        I'm trying to raise money for myself, and I'm asking anyone
+        who's willing to help for just one dollar.
+      </p>
+
+    </section>
+
+    <section class="card">
+
+      <div class="goal-header">
+
+        <div>
+          <div class="raised">$0</div>
+          <div class="goal">raised so far</div>
+        </div>
+
+        <div class="goal">
+          Goal: $1,000,000
+        </div>
+
+      </div>
+
+      <div class="progress-track">
         <div class="progress"></div>
       </div>
-    </div>
 
-    <a
-      class="donate"
-      href="https://venmo.com/u/j_doshen63"
-      target="_blank"
-      rel="noopener noreferrer">
-      Donate $1 on Venmo
-    </a>
+      <div class="percentage">
+        0% of goal
+      </div>
 
-    <p class="small">
+      <div class="actions">
+
+        <a
+          class="button donate"
+          href="https://venmo.com/u/j_doshen63"
+          target="_blank"
+          rel="noopener noreferrer">
+          💙 Donate $1
+        </a>
+
+        <button
+          class="button share"
+          onclick="sharePage()">
+          🔗 Share
+        </button>
+
+      </div>
+
+      <button
+        class="button celebrate"
+        onclick="celebrate()">
+        🎉 I donated — celebrate!
+      </button>
+
+      <div class="info">
+
+        <div class="info-box">
+          <strong>$1</strong>
+          <span>requested donation</span>
+        </div>
+
+        <div class="info-box">
+          <strong>1M</strong>
+          <span>goal in supporters</span>
+        </div>
+
+        <div class="info-box">
+          <strong>100%</strong>
+          <span>optional</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <p class="message">
       No pressure at all. If you don't want to donate, sharing this page
-      helps too.
+      with someone else helps too. Thanks for taking the time to check it out. ❤️
     </p>
 
-  </div>
+    <footer>
+      Made with ❤️ • Thank you for your support
+    </footer>
+
+  </main>
+
+  <div id="confetti-container"></div>
+
+  <script>
+
+    function sharePage() {
+
+      if (navigator.share) {
+
+        navigator.share({
+          title: "Can You Spare $1?",
+          text: "I'm trying to raise money and asking people who are willing to help for $1.",
+          url: window.location.href
+        });
+
+      } else {
+
+        navigator.clipboard.writeText(window.location.href);
+
+        alert("Link copied! Send it to whoever you'd like.");
+
+      }
+    }
+
+
+    function celebrate() {
+
+      const container =
+        document.getElementById("confetti-container");
+
+      const colors = [
+        "#6f8cff",
+        "#b16cff",
+        "#ffffff",
+        "#ffd166",
+        "#06d6a0",
+        "#ff6b9d"
+      ];
+
+      for (let i = 0; i < 150; i++) {
+
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+          Math.random() * 100 + "vw";
+
+        piece.style.animationDuration =
+          (2 + Math.random() * 3) + "s";
+
+        piece.style.animationDelay =
+          Math.random() * 0.7 + "s";
+
+        piece.style.background =
+          colors[Math.floor(Math.random() * colors.length)];
+
+        piece.style.width =
+          (6 + Math.random() * 8) + "px";
+
+        piece.style.height =
+          (8 + Math.random() * 12) + "px";
+
+        container.appendChild(piece);
+
+        setTimeout(() => {
+          piece.remove();
+        }, 5500);
+      }
+    }
+
+  </script>
 
 </body>
 </html>
